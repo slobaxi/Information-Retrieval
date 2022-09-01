@@ -29,6 +29,8 @@ def editStringDistance(s1 : str, s2 : str):
 
 def setStringDistanceJaccard(s1 : str, s2 : str):
     set1, set2 = set(s1), set(s2)
+    if len(set1 | set2) == 0:
+        return 1
     return len(set1 & set2) / len(set1 | set2)
 
 def tfidf(term: str, fileNames, document):
@@ -44,6 +46,7 @@ def tfidf(term: str, fileNames, document):
         text = ""
         for s in textRead:
             text +=s
+        text = re.sub("[^0-9a-zA-Z]", " ", text)    
         list.append(text)
         if(fileName == document):
             doc = text    
@@ -65,6 +68,10 @@ def tfidf(term: str, fileNames, document):
             if word == term:
                 occurance += 1
                 break
+            
+    if(occurance == 0):
+        return        
+
     idf = math.log(len(fileNames)/occurance,10)
 
     return idf * df
@@ -78,7 +85,8 @@ def test(fileName : str):
         textRead = f.readlines()
     text = ""
     for s in textRead:
-        text +=s   
+        text +=s
+    text = re.sub("[^0-9a-zA-Z]", " ", text)        
     text = text.split(" ")
 
     editDistance = []
@@ -94,4 +102,4 @@ def test(fileName : str):
 
     
 
-# print(test("bridge.txt"))   
+print(test("bridge.txt"))   
